@@ -20,28 +20,7 @@ app.use(jsonBodyParser)
 
 app.use('/api/word', WordRouter)
 
-app.get('/api/rhymes/:word', (req, res, next) => {
 
-  console.log('get rhymes')
-  const word = req.params.word
-
-     
-     axios({
-         "method":"GET",
-         "url":`https://wordsapiv1.p.rapidapi.com/words/%7B${word}%7D/rhymes`,
-         "headers":{
-         "content-type":"application/octet-stream",
-         "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
-         "x-rapidapi-key":`${config.API_KEY}`
-         }
-         })
-         .then((words)=>{
-          res.status(200).json(words)
-         })
-         .catch(next);
-
-
- })
 
  app.use(function errorHandler(error, req, res, next) {
    let response
