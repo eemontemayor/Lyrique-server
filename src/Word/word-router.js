@@ -1,66 +1,70 @@
+'use strict';
+
 const express = require('express');
 const WordRouter= express.Router();
 const axios = require('axios');
+const config = require('../config')
+
 WordRouter
-    .route('/rhymes/:word')
-
-    .get((req, res, next) => {
+   .get('/rhymes/:word', (req, res,next) => {
 
 
-     const {word} = req.params
+     const word = req.params.word
 
         
-        axios({
+      return  axios({
             "method":"GET",
-            "url":"https://wordsapiv1.p.rapidapi.com/words/%7Bword%7D/rhymes",
+            "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/rhymes`,
             "headers":{
             "content-type":"application/octet-stream",
             "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
-            "x-rapidapi-key":"b5f70bd1c9msh133a4bbdfb3c433p1463c0jsn8429fb0c932c"
+            "x-rapidapi-key":`${config.API_KEY}`
             }
             })
-            .then((response)=>{
-            return res.status(200).json()
+            .then(words=>{
+
+
+              res.status(200).json(words.data.rhymes)
             })
-            .catch((error)=>{
-            console.log(error)
-            })
+            .catch(next);
 
 
     })
 
-WordRouter
-    .route('./thesaurus')
+// WordRouter
+    
 
    
-    .get((req, res, next) => {
+//     .get('/thesaurus/:word',(req, res) => {
 
 
 
 
 
-    })
+//     })
 
-    WordRouter
-    .route('./syllables')
+//     WordRouter
+   
 
    
-    .get((req, res, next) => {
+//     .get('/syllables/:word', (req, res) => {
 
-axios({
-    "method":"GET",
-    "url":"https://wordsapiv1.p.rapidapi.com/words/incredible/syllables",
-    "headers":{
-    "content-type":"application/octet-stream",
-    "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
-    "x-rapidapi-key":"b5f70bd1c9msh133a4bbdfb3c433p1463c0jsn8429fb0c932c"
-    }
-    })
-    .then((response)=>{
-      console.log(response)
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
+// axios({
+//     "method":"GET",
+//     "url":"https://wordsapiv1.p.rapidapi.com/words/incredible/syllables",
+//     "headers":{
+//     "content-type":"application/octet-stream",
+//     "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
+//     "x-rapidapi-key":"b5f70bd1c9msh133a4bbdfb3c433p1463c0jsn8429fb0c932c"
+//     }
+//     })
+//     .then((response)=>{
+//       console.log(response)
+//     })
+//     .catch((error)=>{
+//       console.log(error)
+//     })
 
-}
+// })
+
+module.exports = WordRouter
