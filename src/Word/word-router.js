@@ -37,6 +37,31 @@ WordRouter
 
 
     })
+
+    WordRouter
+    .get('/similairPhrases/:phrase', (req, res,next) => {
+ 
+ 
+      const wordArr = req.params.phrase.split('+')
+
+
+  
+
+      return  axios({
+             "method":"GET",
+             "url":`https://api.datamuse.com/words?ml=${wordArr}`,
+         
+             })
+       .then(phrases=>{
+        console.log(phrases.data)
+                //  res.status(200).json(words.data)
+               })
+               .catch(next);
+              })
+
+
+              WordRouter
+
     WordRouter
     .get('/homophones/:word', (req, res,next) => {
  
@@ -98,12 +123,12 @@ WordRouter
 })
 
     WordRouter
-    .get('/syllables/:word', (req, res, next) => {
+    .get('/wordData/:word',  (req, res, next) => {
       const word = req.params.word
 
-        console.log('from sylll')
        
-      return axios({
+       
+      const syll =  axios({
     "method":"GET",
     "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/syllables`,
     "headers":{
@@ -114,14 +139,18 @@ WordRouter
     })
     .then(word=>{
       // console.log(word.data.syllables)
-      res.status(200).json(word.data.syllables)
+      return word.data.syllables
     })
     .catch(next);
+
+
+return syll
+
 
 })
 
 WordRouter
-.get('/syllables/:word', (req, res, next) => {
+.get('/definition/:word', (req, res, next) => {
   const word = req.params.word
 
     console.log('from sylll')
