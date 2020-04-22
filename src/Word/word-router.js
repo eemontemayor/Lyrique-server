@@ -21,19 +21,7 @@ WordRouter
                 res.status(200).json(words.data)
               })
               .catch(next);
-      // return  axios({
-      //       "method":"GET",
-      //       "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/rhymes`,
-      //       "headers":{
-      //       "content-type":"application/octet-stream",
-      //       "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
-      //       "x-rapidapi-key":`${config.API_KEY}`
-      //       }
-      //       })
-      //       .then(words=>{
-      //         res.status(200).json(words.data.rhymes)
-      //       })
-      //       .catch(next);
+  
 
 
     })
@@ -93,8 +81,8 @@ WordRouter
                    
                        })
                  .then(words=>{
-                  console.log(words)
-                          //  res.status(200).json(words.data)
+                  // console.log(words)
+                           res.status(200).json(words.data)
                          })
                          .catch(next);
                         })
@@ -123,12 +111,13 @@ WordRouter
 })
 
     WordRouter
-    .get('/wordData/:word',  (req, res, next) => {
+    .get('/data/:word', async (req, res, next) => {
       const word = req.params.word
+      const resObj = {}
 
+       console.log('herere')
        
-       
-      const syll =  axios({
+      await axios({
     "method":"GET",
     "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/syllables`,
     "headers":{
@@ -138,13 +127,55 @@ WordRouter
     }
     })
     .then(word=>{
-      // console.log(word.data.syllables)
-      return word.data.syllables
+     console.log(word)
+     resObj.syllables = word.data.syllables
     })
     .catch(next);
+    
+   await axios({
+      "method":"GET",
+      "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`,
+      "headers":{
+      "content-type":"application/octet-stream",
+      "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
+      "x-rapidapi-key":`${config.API_KEY}`
+      }
+      })
+      .then(word=>{
+        console.log(word)
+        resObj.definitions = word.data.definitions
+      })
+      .catch(next);
+    await  axios({
+        "method":"GET",
+        "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`,
+        "headers":{
+        "content-type":"application/octet-stream",
+        "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
+        "x-rapidapi-key":`${config.API_KEY}`
+        }
+        })
+        .then(word=>{
+         
+          resObj.synonyms = word.data.synonyms
+        })
+        .catch(next);
 
 
-return syll
+       await axios({
+                "method":"GET",
+                "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/rhymes`,
+                "headers":{
+                "content-type":"application/octet-stream",
+                "x-rapidapi-host":"wordsapiv1.p.rapidapi.com",
+                "x-rapidapi-key":`${config.API_KEY}`
+                }
+                })
+                .then(words=>{
+                  resObj.rhymes = words.data.rhymes
+                })
+                .catch(next);
+  return  res.status(200).json(resObj)
 
 
 })
