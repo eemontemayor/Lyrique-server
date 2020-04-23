@@ -4,7 +4,7 @@ const express = require('express');
 const WordRouter= express.Router();
 const axios = require('axios');
 const config = require('../config')
-
+const {groupByLength} = require('./word-list-service')
 WordRouter
    .get('/rhymes/:word', (req, res,next) => {
 
@@ -17,8 +17,10 @@ WordRouter
         
             })
       .then(words=>{
-     
-                res.status(200).json(words.data)
+       const list =  groupByLength(words.data)
+                res.status(200).json(  
+                 list
+                  )
               })
               .catch(next);
   
@@ -115,7 +117,7 @@ WordRouter
       const word = req.params.word
       const resObj = {}
 
-       console.log('herere')
+     
        
       await axios({
     "method":"GET",
@@ -127,7 +129,7 @@ WordRouter
     }
     })
     .then(word=>{
-     console.log(word)
+    
      resObj.syllables = word.data.syllables
     })
     .catch(next);
@@ -142,10 +144,12 @@ WordRouter
       }
       })
       .then(word=>{
-        console.log(word)
+      
         resObj.definitions = word.data.definitions
       })
       .catch(next);
+
+
     await  axios({
         "method":"GET",
         "url":`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`,
@@ -175,6 +179,9 @@ WordRouter
                   resObj.rhymes = words.data.rhymes
                 })
                 .catch(next);
+
+
+console.log('resObj', resObj)
   return  res.status(200).json(resObj)
 
 
