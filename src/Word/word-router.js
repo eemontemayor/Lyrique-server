@@ -5,8 +5,12 @@ const WordRouter = express.Router();
 const axios = require("axios");
 const config = require("../config");
 const { groupByLength, quickSort } = require("./word-list-service");
+
+
+
 WordRouter.get("/rhymes/:word", (req, res, next) => {
   const word = req.params.word;
+ 
 
   return axios({
     method: "GET",
@@ -14,8 +18,11 @@ WordRouter.get("/rhymes/:word", (req, res, next) => {
   })
     .then((words) => {
       const sortedList = quickSort(words.data);
-      
-      res.status(200).json(sortedList);
+      // console.log('sortedList', sortedList)
+      const result = groupByLength(sortedList)
+  
+
+      res.status(200).json(result);
     })
     .catch(next);
 });

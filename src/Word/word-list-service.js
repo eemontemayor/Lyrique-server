@@ -2,15 +2,29 @@
     
      function groupByLength(arr){
 
+        let lrg = []
+    let med = []
+    let sm = []
+  
+    arr.forEach(i => {
+         
+        return i['numSyllables'] === 1 || i['numSyllables'] === 2  ? sm.push(i): i['numSyllables'] === 3 || i['numSyllables'] === 4 ? med.push(i) : lrg.push(i)
+  
+    
+
+})
+
+   
        
-    const list = arr.sort((a,b)=> {
-        return a['numSyllables'] - b['numSyllables']} );
+console.log('sm', sm)
+console.log('med', med)
+console.log('lrg', lrg)
+    return [sm,med,lrg]
 
-    console.log(list)
-    return list;
 
 
-}
+     }
+
 function quickSort(array, start = 0, end = array.length) {
     if (start >= end) {
         return array;
