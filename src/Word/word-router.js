@@ -56,21 +56,7 @@ WordRouter.get("/homophones/:word", (req, res, next) => {
     })
     .catch(next);
 });
-WordRouter.get("/alliterations/:word", (req, res, next) => {
-  const word = req.params.word;
 
-  const firstLetter = word.split("")[0];
-  console.log(firstLetter);
-  return axios({
-    method: "GET",
-    url: `https://api.datamuse.com/words?ml=${word}&sp=${firstLetter}*`,
-  })
-    .then((words) => {
-      // console.log(words)
-      res.status(200).json(words.data);
-    })
-    .catch(next);
-});
 
 WordRouter.get("/synonyms/:word", (req, res, next) => {
   const word = req.params.word;
@@ -156,8 +142,6 @@ WordRouter.get("/data/:word", async (req, res, next) => {
 
 WordRouter.get("/definition/:word", (req, res, next) => {
   const word = req.params.word;
-
-  console.log("from sylll");
 
   return axios({
     method: "GET",
