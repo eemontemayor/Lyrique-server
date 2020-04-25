@@ -41,7 +41,7 @@ WordRouter.get("/similairPhrases/:phrase", (req, res, next) => {
     .catch(next);
 });
 
-WordRouter;
+
 
 WordRouter.get("/homophones/:word", (req, res, next) => {
   const word = req.params.word;
