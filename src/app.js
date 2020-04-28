@@ -1,11 +1,17 @@
 require('dotenv').config()
 const express = require('express')
+const redis = require("redis");
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const WordRouter = require('./Word/word-router')
 const jsonBodyParser= express.json()
+const port_redis =  6379;
+const redis_client = redis.createClient(port_redis);
+
+
+
 const app = express()
 
 const morganOption = (NODE_ENV === 'production')
