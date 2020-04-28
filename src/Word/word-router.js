@@ -4,7 +4,7 @@ const express = require("express");
 const WordRouter = express.Router();
 const axios = require("axios");
 const config = require("../config");
-const { groupByLength, quickSort } = require("./word-list-service");
+const { groupBySyllCount, quickSort } = require("./word-list-service");
 
 
 
@@ -14,12 +14,14 @@ WordRouter.get("/rhymes/:word", (req, res, next) => {
 
   return axios({
     method: "GET",
-    url: `https://api.datamuse.com/words?rel_rhy=${word}`,
+    url: `https://api.datamuse.com/words?rel_rhy=${word}&md=drp&max=300`,
   })
     .then((words) => {
       const sortedList = quickSort(words.data);
+
+      console.log(sortedList)
       // console.log('sortedList', sortedList)
-      const result = groupByLength(sortedList)
+      const result = groupBySyllCount(sortedList)
   
 
       res.status(200).json(result);
@@ -27,136 +29,73 @@ WordRouter.get("/rhymes/:word", (req, res, next) => {
     .catch(next);
 });
 
-WordRouter.get("/similairPhrases/:phrase", (req, res, next) => {
-  const wordArr = req.params.phrase.split("+");
-
-  return axios({
-    method: "GET",
-    url: `https://api.datamuse.com/words?ml=${wordArr}`,
-  })
-    .then((phrases) => {
-      console.log(phrases.data);
-      //  res.status(200).json(words.data)
-    })
-    .catch(next);
-});
-
-
-
-WordRouter.get("/homophones/:word", (req, res, next) => {
-  const word = req.params.word;
-
-  return axios({
-    method: "GET",
-    url: `https://api.datamuse.com/words?sl=${word}`,
-  })
-    .then((words) => {
-      console.log(words.data);
-      //  res.status(200).json(words.data)
-    })
-    .catch(next);
-});
 
 
 WordRouter.get("/synonyms/:word", (req, res, next) => {
   const word = req.params.word;
+ 
 
   return axios({
     method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
-  })
-    .then((word) => {
-      res.status(200).json(word.data.synonyms);
-    })
-    .catch(next);
-});
-
-WordRouter.get("/data/:word", async (req, res, next) => {
-  const word = req.params.word;
-  const resObj = {};
-
-  await axios({
-    method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/syllables`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
-  })
-    .then((word) => {
-      resObj.syllables = word.data.syllables;
-    })
-    .catch(next);
-
-  await axios({
-    method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
-  })
-    .then((word) => {
-      resObj.definitions = word.data.definitions;
-    })
-    .catch(next);
-
-  await axios({
-    method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
-  })
-    .then((word) => {
-      resObj.synonyms = word.data.synonyms;
-    })
-    .catch(next);
-
-  await axios({
-    method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/rhymes`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
+    url: `https://api.datamuse.com/words?rel_syn=${word}&md=drp&max=20`,
   })
     .then((words) => {
-      resObj.rhymes = words.data.rhymes;
+      const sortedList = quickSort(words.data);
+
+      console.log(sortedList)
+      // console.log('sortedList', sortedList)
+      const result = groupBySyllCount(sortedList)
+  
+
+      res.status(200).json(result);
     })
     .catch(next);
-
-  console.log("resObj", resObj);
-  return res.status(200).json(resObj);
 });
 
-WordRouter.get("/definition/:word", (req, res, next) => {
+
+WordRouter.get("/alliterations/:word", (req, res, next) => {
   const word = req.params.word;
+ 
 
   return axios({
     method: "GET",
-    url: `https://wordsapiv1.p.rapidapi.com/words/${word}/definitions`,
-    headers: {
-      "content-type": "application/octet-stream",
-      "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-      "x-rapidapi-key": `${config.API_KEY}`,
-    },
+    url: `https://api.datamuse.com/words?rel_cns=${word}&md=drp&max=200`,
   })
-    .then((word) => {
-      // console.log(word.data.syllables)
-      res.status(200).json(word.data.definitions);
+    .then((words) => {
+      const sortedList = quickSort(words.data);
+
+      console.log(sortedList)
+      // console.log('sortedList', sortedList)
+      const result = groupBySyllCount(sortedList)
+  
+
+      res.status(200).json(result);
     })
     .catch(next);
 });
+
+
+
+WordRouter.get("/data/:word", async (req, res, next) => {
+ 
+  
+
+  const word = req.params.word;
+ 
+
+  return axios({
+    method: "GET",
+    url: `https://api.datamuse.com/words?sp=${word}&md=drp`,
+  })
+    .then((words) => {
+      res.status(200).json(words.data);
+    })
+    .catch(next);
+
+
+
+});
+
+
 
 module.exports = WordRouter;

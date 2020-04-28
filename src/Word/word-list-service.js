@@ -1,12 +1,12 @@
-function groupByLength(arr) {
+function groupBySyllCount(arr) {
   let lrg = [];
   let med = [];
   let sm = [];
 
   arr.forEach((i) => {
-    return i["numSyllables"] === 1 || i["numSyllables"] === 2
+    return i["numSyllables"] === 1 
       ? sm.push(i)
-      : i["numSyllables"] === 3 || i["numSyllables"] === 4
+      : i["numSyllables"] === 2
       ? med.push(i)
       : lrg.push(i);
   });
@@ -41,4 +41,4 @@ function swap(array, i, j) {
   array[j] = tmp;
 }
 
-module.exports = { groupByLength, quickSort };
+module.exports = { groupBySyllCount, quickSort };
