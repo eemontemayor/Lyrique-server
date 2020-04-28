@@ -4,7 +4,7 @@ function groupBySyllCount(arr) {
   let sm = [];
 
   arr.forEach((i) => {
-    return i["numSyllables"] === 1 
+    return i["numSyllables"] === 1
       ? sm.push(i)
       : i["numSyllables"] === 2
       ? med.push(i)
@@ -13,6 +13,12 @@ function groupBySyllCount(arr) {
 
   return [sm, med, lrg];
 }
+
+function groupByScore(arr) {}
+
+function groupByWordLength(arr) {}
+
+function groupByPartOfSpeech(arr) {}
 
 function quickSort(array, start = 0, end = array.length) {
   if (start >= end) {
@@ -41,4 +47,10 @@ function swap(array, i, j) {
   array[j] = tmp;
 }
 
-module.exports = { groupBySyllCount, quickSort };
+module.exports = {
+  groupBySyllCount,
+  quickSort,
+  groupByWordLength,
+  groupByScore,
+  groupByPartOfSpeech,
+};

@@ -37,7 +37,7 @@ WordRouter.get("/synonyms/:word", (req, res, next) => {
 
   return axios({
     method: "GET",
-    url: `https://api.datamuse.com/words?rel_syn=${word}&md=drp&max=20`,
+    url: `https://api.datamuse.com/words?rel_syn=${word}&md=drp&max=200`,
   })
     .then((words) => {
       const sortedList = quickSort(words.data);
